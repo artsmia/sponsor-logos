@@ -8,3 +8,14 @@ svgs:
 		svgo "$$logoName.svg"; \
     rm "$$logoName.pdf"; \
 	done
+
+readme.md:
+	find . -name "*.svg" | sed 's|^./||; s| |%20|g' | while read logo; do \
+		echo '![](http://artsmia.github.io/sponsor-logos/'$$logo')'; \
+	done > readme.md
+
+index.html: readme.md
+	multimarkdown readme.md > index.html
+	echo -e "\n<style>p { -webkit-column-count: 5; column-count: 5; } img { width: 93%; }</style>" >> index.html
+
+.PHONY: readme.md index.html
